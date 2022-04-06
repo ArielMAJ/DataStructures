@@ -12,6 +12,22 @@ double power(double m, int n)
     // of "m*m*m*..." "n times".
 }
 
+// "Naive solution" but as a loop instead of implemented recursively.
+// This actually should work better than its recursive version as it shouldn't
+// run into the "stack overflow" problem.
+double power_loop(double m, int n)
+{
+    double result = 1.0;
+
+    for (int i = 0; i < n; i++)
+    {
+        result *= m;
+    }
+
+    return result;
+}
+
+
 // A more efficient solution.
 double power1(double m, int n)
 {
@@ -25,6 +41,7 @@ double power1(double m, int n)
 int main()
 {
     printf("%f\n", power1(1.0000042424242, 424242)); // This one runs and returns "instantly" (in my computer);
+    printf("%f\n", power_loop(1.0000042424242, 424242)); // This one runs and returns "instantly" (in my computer);
     printf("%f\n", power(1.0000042424242, 424242)); // This one breaks (stack overflow? idk) with n>=44000 (in my computer);
     return 0;
 }
