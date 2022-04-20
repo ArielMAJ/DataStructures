@@ -2,6 +2,7 @@
 
 #include<stdio.h>
 
+// Defining the array data type:
 typedef struct Array {
     int A[10];
     int size;
@@ -15,27 +16,34 @@ void Insert(Array *arr, int index, int x);
 
 int main()
 {
+    // Starting an array of size 4 and max size 7.
     Array arr1 = {{0, 1, 2, 3}, 7, 4};
-    
-    Append(&arr1, 11);
+
+    // Appending "12" to the end of the array.
+    Append(&arr1, 12);
+    Display(arr1);
+
+    // Inserting "11" to the start of the array.
     Insert(&arr1, 0, 11);
     Display(arr1);
     
     return 0;
 }
 
+// Function for printing array datastructure.
 void Display(Array arr)
 {
-    printf("\nElements are\n");   
+    printf("Elements are\n");   
     for(int i = 0; i < arr.length; i++)
-        printf("%d ",arr.A[i]);
+        printf("%d ", arr.A[i]);
     printf("\n");
 }
+
 
 void Append(Array *arr, int x)
 {
     if(arr->length < arr->size)
-    arr->A[arr->length++] = x;
+        arr->A[arr->length++] = x;
 }
 
 void Insert(Array *arr, int index, int x)
