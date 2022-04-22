@@ -7,7 +7,7 @@ private:
     int *A;
     int length;
     int max_length;
-    bool sorted;
+    // int sorted;
 
 public:
     // Constructor
@@ -17,11 +17,18 @@ public:
     void Create();
     void Display();
     void Append(int value);
+    void Push(int value);
     void Insert(int index, int x);
+    void SortedInsert(int value);
     void Delete(int value);
     int  Pop(int index);
+    void Reverse();
+    void RightShiftAll();
+    void RightShiftRange(int start, int end);
+    void LeftShiftAll();
+    void LeftShiftRange(int start, int end);
     void Swap(int *x, int *y);
-    int  Find(int value);
+    // int  Find(int value);
     int  LinearSearch(int value);
     int  BinarySearch(int value);
     int  BinarySearchLeftMost(int value);
@@ -31,6 +38,7 @@ public:
     int  Min();
     int  Sum();
     float Avg();
+    bool IsSorted();
     // void Sort();
 
     // Destructor
@@ -49,8 +57,8 @@ int main()
     cout << "Min: " << list.Get(list.Min()) << "; ";
     cout << "Avg: " << list.Avg() << "; ";
     cout << "Sum: " << list.Sum() << "; ";
-    cout << "list[0] = 0;" << endl;
-    list.Set(0, 0);
+    cout << "\nSetting list[0] = -1;" << endl;
+    list.Set(0, -1);
     list.Display();
 
     cout << endl << "Appending (to the end):" << endl;
@@ -77,8 +85,31 @@ int main()
     cout << "Found at position " << list.BinarySearchLeftMost(2) << endl;
     list.Display();
 
+    cout << endl << "Reversed array:" << endl;
+    list.Reverse();
+    list.Display();
+
+    cout << endl << "Reversed array:" << endl;
+    list.Reverse();
+    list.Display();
+
+    cout << endl << "Sorted Insert:" << endl;
+    list.SortedInsert(5);
+    list.Display();
+
+    cout << endl << "LeftShiftAll:" << endl;
+    list.LeftShiftAll();
+    list.Display();
+    cout << endl << "IsSorted: " << list.IsSorted() << endl;
+
+    cout << endl << "RightShiftAll:" << endl;
+    list.RightShiftAll();
+    list.Display();
+    cout << endl << "IsSorted: " << list.IsSorted() << endl;
+
     return 0;
 }
+
 
 // ******************************************************************************** 
 // Implementations of the class (could be in a diff file I think)
@@ -87,7 +118,7 @@ int main()
 List::List(int initial_size)
 {
     // We will assume the array won't be sorted after populated.
-    sorted = 1;
+    // sorted = 1;
     // The current length is 0. The List is "empty".
     length = 0;
     // Saving the max length.
@@ -128,15 +159,57 @@ void List::Append(int value)
     }
 }
 
+// Inserts at position 0.
+void List::Push(int value)
+{
+    // We can only insert/append while the vector isn't at its max length.
+    if(length < max_length)
+    {
+        for(int i = length; i > 0; i--)
+            A[i] = A[i-1];
+        A[0] = value;
+        length++;
+    }
+}
+
 // Inserts at a given position.
 void List::Insert(int index, int value)
 {
     // We can only insert/append while the vector isn't at its max length.
     if(length < max_length)
     {
-        for(int i{length}; i > index; i--)
+        for(int i = length; i > index; i--)
             A[i] = A[i-1];
         A[index] = value;
+        length++;
+    }
+}
+
+// Inserts at a given position.
+void List::SortedInsert(int value)
+{    
+//     if (!sorted)
+//     {
+//         cout << "The array must be sorted for this to work." << endl;
+//         return;
+//     }
+
+    // We can only insert/append while the vector isn't at its max length.
+    if(length < max_length)
+    {
+        int i;
+        // if (sorted == 1)
+        // {
+        for (i = length; i > 0 && value < A[i - 1]; i--)
+            A[i] = A[i-1];
+        A[i] = value;
+        // }
+        // else if (sorted == -1)
+        // {
+        //     for (i = length; value > A[i] && i > 0; i--)
+        //         A[i] = A[i-1];
+        //     A[i] = value;
+        // }
         length++;
     }
 }
@@ -167,7 +240,8 @@ int List::Pop(int index)
 // Deletes a specific value and returns it.
 void List::Delete(int value)
 {
-    int index = Find(value);
+    // int index = Find(value);
+    int index = LinearSearch(value);
     if (index >= 0)
         Pop(index);
 }
@@ -206,16 +280,20 @@ int List::LinearSearch(int value)
 
 int List::BinarySearch(int value)
 {
-    if (!sorted)
-    {
-        cout << "The array must be sorted for binary search to work." << endl;
-        return -1;
-    }
+//     if (!sorted)
+//     {
+//         cout << "The array must be sorted for binary search to work." << endl;
+//         return -1;
+//     }
 
     int left = 0;
     int right = length - 1;
 
     int mid;
+    
+    // If sorted
+    // if (sorted == 1)
+    // {
     while (left <= right)
     {
         mid = (left + right) / 2;
@@ -227,6 +305,22 @@ int List::BinarySearch(int value)
         else
             right = mid - 1;
     }
+    // }
+    // If sorted backwards
+    // else if (sorted == -1)
+    // {
+    //     while (left <= right)
+    //     {
+    //         mid = (left + right) / 2;
+
+    //         if (value == A[mid]) return mid;
+
+    //         if (value < A[mid])
+    //             left = mid + 1;
+    //         else
+    //             right = mid - 1;
+    //     }
+    // }
     return -1;
 }
 
@@ -236,17 +330,21 @@ int List::BinarySearch(int value)
 // numbers in the list.
 int List::BinarySearchLeftMost(int value)
 {
-    if (!sorted)
-    {
-        cout << "The array must be sorted for binary search to work." << endl;
-        return -1;
-    }
+//     if (!sorted)
+//     {
+//         cout << "The array must be sorted for binary search to work." << endl;
+//         return -1;
+//     }
 
     int left = 0;
     int right = length - 1;
     int mid;
     int pos = -1;
 
+    // If sorted
+    // This will return the left most ocurrence.
+    // if (sorted == 1)
+    // {
     while (left <= right)
     {
         mid = (left + right) / 2;
@@ -263,15 +361,37 @@ int List::BinarySearchLeftMost(int value)
         else
             right = mid - 1;
     }
+    // }
+    // If sorted backwards
+    // This will return the right most ocurrence (which would be the left most if sorted normally)
+    // else if (sorted == -1)
+    // {
+    //     while (left <= right)
+    //     {
+    //         mid = (left + right) / 2;
+
+    //         if (value == A[mid])
+    //         {
+    //             if (A[mid] != A[mid + 1])
+    //                 return mid;
+    //             pos = mid;
+    //         }
+
+    //         if (value > A[mid])
+    //             right = mid - 1;
+    //         else
+    //             left = mid + 1;
+    //     }
+    // }
     return pos;
 }
 
-int List::Find(int value)
-{
-    if (sorted)
-        return BinarySearchLeftMost(value);
-    return LinearSearch(value);
-}
+// int List::Find(int value)
+// {
+//     if (sorted)
+//         return BinarySearchLeftMost(value);
+//     return LinearSearch(value);
+// }
 
 List::~List()
 {
@@ -331,3 +451,46 @@ float List::Avg()
     return 1.0 * Sum() / length;
 }
 
+void List::Reverse()
+{
+    for (int start = 0, end = length - 1; start < end; start++, end--)
+        Swap(&A[start], &A[end]);
+    // if (sorted)
+    //     sorted *= -1;
+}
+
+void List::RightShiftAll()
+{
+    RightShiftRange(0, length - 1);
+}
+
+void List::RightShiftRange(int start, int end)
+{
+    int tmp = A[end];
+    for (int i = end; i > start; i--)
+        A[i] = A[i - 1];
+    A[start] = tmp;
+}
+
+void List::LeftShiftAll()
+{
+    LeftShiftRange(0, length - 1);
+}
+
+void List::LeftShiftRange(int start, int end)
+{
+    int tmp = A[start];
+    for (int i = start; i < end; i++)
+        A[i] = A[i + 1];
+    A[end] = tmp;
+}
+
+bool List::IsSorted()
+{
+    for (int i = 1; i < length; i++)
+    {
+        if (A[i] < A[i - 1])
+            return false;
+    }
+    return true;
+}
