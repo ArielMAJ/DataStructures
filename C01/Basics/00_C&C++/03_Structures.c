@@ -36,9 +36,10 @@ int main(void)
     // to cast the returned pointer to the correct type.
     Rectangle *rect0 = (Rectangle *) malloc(sizeof(Rectangle));
 
-    printf("Size of Rectangle:\t%.2u\n", (unsigned) sizeof(rect0));
-    printf("Size of R.width:\t%.2u\n", (unsigned) sizeof(rect0->width));
-    printf("Size of R.height:\t%.2u\n", (unsigned) sizeof(rect0->height));
+    printf("Size of Rectangle struct:\t%.2u\n", (unsigned) sizeof(Rectangle));
+    printf("Size of (pointer to) Rectangle:\t%.2u\n", (unsigned) sizeof(rect0));
+    printf("\t- Size of R.width:\t%.2u\n", (unsigned) sizeof(rect0->width));
+    printf("\t- Size of R.height:\t%.2u\n", (unsigned) sizeof(rect0->height));
     printf("\nNon-initialized rect0:\n");
     printHeapRectangle(rect0);
 
@@ -54,10 +55,85 @@ int main(void)
     printf("\nRect1:\n");
     printRectangle(rect1);
 
+
+    struct Card *test_card = (struct Card *) malloc(sizeof(struct Card));
+    printf("\nSize of Card struct:\t\t%.2u\n", (unsigned) sizeof(struct Card));
+    printf("Size of (pointer to) Card:\t%.2u\n", (unsigned) sizeof(rect0));
+
     printf("\nCard:\n");
     struct Card card = {1, 1, 0}; // Ace of spades;
     printCard(card);
 
+    // Defining and initializing array of struct;
+    struct Card deck[52] =
+    {
+        { 1, 0, 0},
+        { 2, 0, 0},
+        { 3, 0, 0},
+        { 4, 0, 0},
+        { 5, 0, 0},
+        { 6, 0, 0},
+        { 7, 0, 0},
+        { 8, 0, 0},
+        { 9, 0, 0},
+        {10, 0, 0},
+        {11, 0, 0},
+        {12, 0, 0},
+        {13, 0, 0},
+        { 1, 1, 0},
+        { 2, 1, 0},
+        { 3, 1, 0},
+        { 4, 1, 0},
+        { 5, 1, 0},
+        { 6, 1, 0},
+        { 7, 1, 0},
+        { 8, 1, 0},
+        { 9, 1, 0},
+        {10, 1, 0},
+        {11, 1, 0},
+        {12, 1, 0},
+        {13, 1, 0},
+        { 1, 2, 1},
+        { 2, 2, 1},
+        { 3, 2, 1},
+        { 4, 2, 1},
+        { 5, 2, 1},
+        { 6, 2, 1},
+        { 7, 2, 1},
+        { 8, 2, 1},
+        { 9, 2, 1},
+        {10, 2, 1},
+        {11, 2, 1},
+        {12, 2, 1},
+        {13, 2, 1},
+        { 1, 3, 1},
+        { 2, 3, 1},
+        { 3, 3, 1},
+        { 4, 3, 1},
+        { 5, 3, 1},
+        { 6, 3, 1},
+        { 7, 3, 1},
+        { 8, 3, 1},
+        { 9, 3, 1},
+        {10, 3, 1},
+        {11, 3, 1},
+        {12, 3, 1},
+        {13, 3, 1},
+    };
+
+    printf("\nDeck card 0:\n");
+    printCard(deck[0]);
+    printf("Deck card 1:\n");
+    printCard(deck[1]);
+    printf("Deck card 2:\n");
+    printCard(deck[2]);
+    printf("Deck card 51:\n");
+    printCard(deck[51]);
+
+
+    // Remember to always free space dinamically alloc'ed.
+    free(rect0);
+    free(test_card);
     return 0;
 }
 
