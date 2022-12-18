@@ -131,7 +131,7 @@ int main(void)
     printCard(deck[51]);
 
 
-    // Remember to always free space dinamically alloc'ed.
+    // Remember to always free dinamically alloc'ed space.
     free(rect0);
     free(test_card);
     return 0;
