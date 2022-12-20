@@ -24,6 +24,11 @@ struct Card
     uint8_t color; // 0/1; black/red;
 };
 
+struct ExampleStruct
+{
+    char *value;
+} var1, var2; // You can create global "ExampleStruct" variables right after the struct definition;
+
 void printHeapRectangle(Rectangle *rect);
 void printRectangle(Rectangle rect);
 void printCard(struct Card card);
