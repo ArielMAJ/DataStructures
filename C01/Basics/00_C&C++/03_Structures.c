@@ -27,6 +27,7 @@ struct Card
 struct ExampleStruct
 {
     char *value;
+    char another_value;
 } var1, var2; // You can create global "ExampleStruct" variables right after the struct definition;
 
 void printHeapRectangle(Rectangle *rect);
@@ -60,6 +61,14 @@ int main(void)
     printf("\nRect1:\n");
     printRectangle(rect1);
 
+    // Sometimes a struct may use up more space than it needs because in some situations
+    // it might be "easier" to use "N bytes" at a time. This is called padding.
+    // If ExampleStruct only had the attribute "another_value" the struct as a whole use
+    // up only sizeof(char) bytes instead.
+    printf("\nSize of ExampleStruct:\t%.2u\n", (unsigned) sizeof(struct ExampleStruct));
+    printf("Size of var1:\t%.2u\n", (unsigned) sizeof(var1));
+    printf("\t- Size of var1.value:\t%.2u\n", (unsigned) sizeof(var1.value));
+    printf("\t- Size of var1.another_value:\t%.2u\n", (unsigned) sizeof(var1.another_value));
 
     struct Card *test_card = (struct Card *) malloc(sizeof(struct Card));
     printf("\nSize of Card struct:\t\t%.2u\n", (unsigned) sizeof(struct Card));
