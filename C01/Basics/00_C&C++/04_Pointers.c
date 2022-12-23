@@ -48,6 +48,18 @@ int main()
     printf("\nShowing result of accessing pointers in different ways:\n\t");
     printArray(heapArray, arraySize);
 
+    // An array variable is basically a pointer to the first value of the array:
+    int stackArray[] = {0, 11, 22, 33, 44, 55, 66, 77};
+    // When assigning a pointer the memory address of an array (in stack or heap)
+    // it will have the same behavior as a "common stack array".
+    examplePointer = stackArray;
+    printf("\nStack Array:\n\t");
+    printArray(stackArray, 8);
+    printf("Pointer to stack array:\n\t");
+    printArray(examplePointer, 8);
+
+    // Always remember to free dinamically allocated memory.
+    free(heapArray);
     return 0;
 }
 
