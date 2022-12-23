@@ -6,6 +6,25 @@ void printArray(int Array[], int length);
 int main()
 {
     int arraySize = 5;
+
+    // Pointers are created with "*". They store the address of variables.
+    int *examplePointer = &arraySize;
+
+    // The address of a variable can be accessed with & (ampersand).
+    // A value can be stored/accessed directly by using the variable name.
+    printf("01 (Address, Value): (%d, %d) <-> Variable pointed to\n", &arraySize, arraySize);
+
+    // You can get the address of a pointer with & too, but that usually doesn't make much sense.
+    // You can store/acces an address in the pointer variable directly with its variable name (similar)
+    // to how you save values in normal variables.
+    // You can get the value stored in the pointed address by using "*".
+    printf("02 (Address, Value): (%d, %d) <-> Pointer\n\n", examplePointer, *examplePointer);
+
+    // Creating an array in heap (dinamically allocated memory).
+    // "(int *) malloc(arraySize * sizeof(int));" and "(int *) calloc(arraySize, sizeof(int));" do the same.
+    // The first one will return an unitialized array, the second one will be an array initialized with zeros.
+    // Both malloc and calloc return a void type pointer, so it is needed to type cast to the correct pointer
+    // type (in this case, an int pointer).
     int *heapArray = (int *) calloc(arraySize, sizeof(int));
     printf("Created a zero populated array:\n\t");
     printArray(heapArray, arraySize);
@@ -28,6 +47,7 @@ int main()
 
     printf("\nShowing result of accessing pointers in different ways:\n\t");
     printArray(heapArray, arraySize);
+
     return 0;
 }
 
