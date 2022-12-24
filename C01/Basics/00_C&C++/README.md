@@ -4,6 +4,10 @@
 
 - A collection of similar data items under a name;
 - They are used for defining new (user defined) data types;
+- To access a structure attribute you use:
+    - "." ("dot") when accessing without using a pointer (eg. normal variable in created in stack; "var.value;");
+    - "->" ("arrow") when accessing through a pointer (eg. created in heap; "p->value;");
+    - "." if you enclose a pointer in round brackets (eg. "(\*p).value;").
 
 ## Pointers
 
