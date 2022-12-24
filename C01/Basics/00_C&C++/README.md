@@ -16,3 +16,12 @@ Main uses are:
 - Acessing heap (dinamically allocated memory -> eg. malloc/alloc);
 - Acessing resources (eg. files in hard disk);
 - Passing parameters.
+
+## References
+
+- References type variables don't exist in C;
+- References, in C++, are just another name for a same variable: an alias;
+- It is closely related to a pointer, but it isn't one;
+- It can be used as an alternative to a pointer;
+- A reference must be initialized at declaration time;
+- They are mostly used as function parameters.
