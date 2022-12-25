@@ -430,5 +430,5 @@ FodyWeavers.xsd
 
 # Executables
 *.exe
-*.out
+[^0-9]*.out
 *.app
