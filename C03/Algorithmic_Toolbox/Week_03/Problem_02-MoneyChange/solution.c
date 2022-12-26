@@ -1,5 +1,3 @@
-// This is probably the optimal solution. Considering the max operations happen in constant time, this is O(1).
-// This could be O(n) if division (/) or remainder (%) operations are O(n) with size of input.
 #include <stdio.h>
 
 typedef struct CoinsChange
