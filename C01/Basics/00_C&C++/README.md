@@ -8,6 +8,7 @@
     - "." ("dot") when accessing without using a pointer (eg. normal variable in created in stack; "var.value;");
     - "->" ("arrow") when accessing through a pointer (eg. created in heap; "p->value;");
     - "." if you enclose a pointer in round brackets (eg. "(\*p).value;").
+- In C you need to use "typedef" to create new structs without using the word "struct". In C++ you can directly use the struct name and ommit the "struct" keyword.
 
 ## Pointers
 
@@ -29,3 +30,7 @@ Main uses are:
 - It can be used as an alternative to a pointer;
 - A reference must be initialized at declaration time;
 - They are mostly used as function parameters.
+
+## Functions
+
+...
