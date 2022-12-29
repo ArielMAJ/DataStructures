@@ -24,4 +24,6 @@ e.g.: Airplane may be the fastest way to travel, but it is good for long distanc
 
 ## Week 03 (Greedy Algorithms)
 
+Greedy Algorithms try to solve a given problem by iteratively selecting a local optimum "best action" until the problem is solved. It won't always find the global optimum.
+
 ## Week 04 (Divide and Conquer Algorithms)
