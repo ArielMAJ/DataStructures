@@ -33,4 +33,31 @@ Main uses are:
 
 ## Functions
 
-...
+- Functions are group of related instructions that perform a specific task;
+- Grouping data $\Rightarrow$ struct; Grouping instructions $\Rightarrow$ function;
+- More functions, each doing just one task, makes a cleaner (and more manageable) code;
+- Types of function parameter passing:
+    1. Pass by value: the function receives a copy of the value;
+    2. Pass by address: the function receives the address of the variable and access it through a pointer;
+    3. Pass by reference (C++ only): the function's inner scope variable will be an alias to the outer scope variable;
+
+```
+// Prototype/header/signature of a function:
+int multiply(int a, int b); // Its declaration's signature must be exactly the same.
+
+int main()
+{
+    int result;
+
+    // Function call:
+    result = multiply(2, 3);
+
+    return 0;
+}
+
+// Declaration of a function (it can also be the prototype/header/signature):
+int multiply(int a, int b)
+{ // The function body is the "destination/elaboration" of a function.
+    return a * b;
+}
+```
