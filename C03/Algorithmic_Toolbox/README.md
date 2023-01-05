@@ -27,3 +27,9 @@ e.g.: Airplane may be the fastest way to travel, but it is good for long distanc
 Greedy Algorithms try to solve a given problem by iteratively selecting a local optimum "best action" until the problem is solved. It won't always find the global optimum.
 
 ## Week 04 (Divide and Conquer Algorithms)
+
+Most of them often have a recursive definition that (usually) can be turned into an iterative one. They divide the problem in smaller subproblems until a minimal problem is reached, solved and it goes back solving the bigger problems from the solved subproblems.
+
+Interesting things: Karatsuba's polynomial and big numbers multiplication.
+
+Other quadratic sorting algorithms: insertion sort, bubble sort.
