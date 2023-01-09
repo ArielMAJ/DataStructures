@@ -33,3 +33,8 @@ Most of them often have a recursive definition that (usually) can be turned into
 Interesting things: Karatsuba's polynomial and big numbers multiplication.
 
 Other quadratic sorting algorithms: insertion sort, bubble sort.
+
+### Linear Search - O(n)
+
+- The array can be in any order;
+- Goes through an array from start to end until a given value is found.
