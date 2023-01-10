@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long long get_fibbonaci_position_to_calculate();
-int calculate_fib_huge(long long fib_pos, int mod);
+long long int get_fibbonaci_position_to_calculate();
+int calculate_fib_huge(long long int fib_pos, int mod);
+int get_pisano_period(int mod);
 int get_mod();
 
 int main()
 {
-    long long fib_pos = get_fibbonaci_position_to_calculate();
+    long long int fib_pos = get_fibbonaci_position_to_calculate();
     int mod = get_mod();
     int result = calculate_fib_huge(fib_pos, mod);
 
@@ -16,12 +17,11 @@ int main()
     return 0;
 }
 
-long long get_fibbonaci_position_to_calculate()
+long long int get_fibbonaci_position_to_calculate()
 {
     double fib_pos_double = 0;
     scanf("%lf", &fib_pos_double);
     long long int fib_pos = (long long int) fib_pos_double;
-
     if (fib_pos < 0)
     {
         printf("Only numbers equal or above zero are accepted.\n");
@@ -45,32 +45,47 @@ int get_mod()
     return mod;
 }
 
-int calculate_fib_huge(long long fib_pos, int mod)
+int get_pisano_period(int mod)
 {
-    static int *fib_saved_values = NULL;
-    if (!fib_saved_values)
+    int prev = 0;
+    int curr = 1;
+    int res = 0;
+    for(int i = 0; i < mod * mod; i++)
     {
-        // This calloc expects that this function will never be called with a
-        // fib_pos higher than the first ever call this function receives per
-        // time this program in run.
-        fib_saved_values = (int *) calloc(fib_pos + 1, sizeof(int));
-        fib_saved_values[0] = 0;
-        fib_saved_values[1] = 1;
-    }
-
-    if (fib_saved_values[fib_pos] != 0 || fib_pos == 0)
-        return fib_saved_values[fib_pos];
-
-    int pos;
-    for (pos = fib_pos - 1; pos > 1; --pos)
-    {
-        if (fib_saved_values[pos])
+        int temp = 0;
+        temp = curr;
+        curr = (prev + curr) % mod;
+        prev = temp;
+ 
+        if (prev == 0 && curr == 1)
+        {
+            res = i + 1;
             break;
+        }
     }
-    pos++;
+    return res;
+}
 
-    for (; pos <= fib_pos; ++pos)
-        fib_saved_values[pos] = (fib_saved_values[pos - 1] + fib_saved_values[pos - 2]) % mod;
+int calculate_fib_huge(long long int fib_pos, int mod)
+{
+    int two_values_bfr = 0;
+    int one_value_bfr = 1;
+    int current_value;
+    int pisano = get_pisano_period(mod);
+    int equivalent_fib_pos = fib_pos % pisano;
 
-    return fib_saved_values[fib_pos];
+    if (equivalent_fib_pos == 0)
+        return two_values_bfr % mod;
+    if (equivalent_fib_pos == 1)
+        return one_value_bfr % mod;
+
+    long long int pos = 2;
+    for (; pos <= equivalent_fib_pos; ++pos)
+    {
+        current_value = (one_value_bfr + two_values_bfr) % mod;
+        two_values_bfr = one_value_bfr;
+        one_value_bfr = current_value;
+    }
+
+    return current_value;
 }
