@@ -38,3 +38,8 @@ Other quadratic sorting algorithms: insertion sort, bubble sort.
 
 - The array can be in any order;
 - Goes through an array from start to end until a given value is found.
+
+### Binary Search - O(log n)
+
+- The array needs to be sorted;
+- Makes use of the fact that the array is sorted to find the value faster: it recursively looks at the middle position and goes to the left if the searched value is smaller than the middle one or to the right otherwise.
