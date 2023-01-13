@@ -15,7 +15,7 @@ int main()
 {
     int money_to_return_in_coins = get_money_change_from_stdin();
     CoinsChange result = exchange_to_coins(money_to_return_in_coins);
-    printf("Money: %6d cents\n", money_to_return_in_coins);
+    // printf("Money: %6d cents\n", money_to_return_in_coins);
     printCoinsChange(result);
 
     return 0;
@@ -43,5 +43,6 @@ CoinsChange exchange_to_coins(int money_to_return_in_coins)
 
 void printCoinsChange(CoinsChange change)
 {
-    printf("Coins: %6d coins\n", change.dimes + change.nickels + change.pennies);
+    printf("%d\n", change.dimes + change.nickels + change.pennies);
+    // printf("Coins: %6d coins\n", change.dimes + change.nickels + change.pennies);
 }
