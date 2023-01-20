@@ -10,19 +10,18 @@ typedef struct Node
 
 typedef struct LList
 {
-    int length;
-    int majority_cand;
-    int *majority_count;
     Node *head;
     Node *tail;
 } LList;
 
+int *MAJORITY_COUNT;
+int HASH_SIZE = 100;
 
 Node *new_node(int value);
 LList *new_linked_list();
-void print_linked_list(LList *list);
-void free_linkedF_list(LList *list);
+void free_linked_list(LList *list);
 
+int hash(int value);
 void search_linked_list(LList *list, int value);
 
 int majority_element(int *array, int array_length);
@@ -38,25 +37,28 @@ int main()
 
     printf("%d\n", majority_element(array, array_length));
 
-
+    MAJORITY_COUNT = NULL;
     return 0;
 }
 
 int majority_element(int *array, int array_length)
 {
-    // LList *hash_map[100];
-    LList *list = new_linked_list();
+    LList **hash_map = (LList **) malloc(HASH_SIZE * sizeof(LList *));
+    for (int i = 0; i < HASH_SIZE; ++i)
+        hash_map[i] = new_linked_list();
 
-    list->head = new_node(array[0]);
-    list->tail = list->head;
-    list->majority_cand = array[0];
-    list->majority_count= &(list->head->count);
 
-    for (int i = 1; i < array_length; ++i)
-        search_linked_list(list, array[i]);
-    if (*(list->majority_count) > array_length/2)
-        return 1;
-    return 0;
+    for (int i = 0; i < array_length; ++i)
+        search_linked_list(hash_map[hash(array[i])], array[i]);
+
+    int theres_a_majority_elem = 0;
+    if (*MAJORITY_COUNT > array_length / 2)
+        theres_a_majority_elem = 1;
+
+    for (int i = 0; i < HASH_SIZE; ++i)
+        free_linked_list(hash_map[i]);
+    free(hash_map);
+    return theres_a_majority_elem;
 }
 
 LList *new_linked_list()
@@ -64,7 +66,6 @@ LList *new_linked_list()
     LList *list = (LList *) malloc(sizeof(LList));
     list->head = NULL;
     list->tail = NULL;
-    list->length = 0;
 
     return list;
 }
@@ -76,17 +77,6 @@ Node *new_node(int value)
     node->count = 1;
     node->next = NULL;
     return node;
-}
-
-void print_linked_list(LList *list)
-{
-    Node *aux = list->head;
-    while (aux != NULL)
-    {
-        printf("%d ", aux->value);
-        aux = aux->next;
-    }
-    printf("\n");
 }
 
 void free_linked_list(LList *list)
@@ -120,7 +110,14 @@ void free_linked_list(LList *list)
 
 void search_linked_list(LList *list, int value)
 {
-
+    if (list->head == NULL)
+    {
+        list->head = new_node(value);
+        list->tail = list->head;
+        if (MAJORITY_COUNT == NULL)
+            MAJORITY_COUNT = &(list->head->count);
+        return;
+    }
     Node *aux = list->head;
 
     while (aux != NULL)
@@ -128,12 +125,17 @@ void search_linked_list(LList *list, int value)
         if (aux->value == value)
         {
             (aux->count)++;
-            if (aux->value != list->majority_cand && aux->count > *(list->majority_count))
-                list->majority_count = &(aux->count);
+            if (aux->count > *MAJORITY_COUNT)
+                MAJORITY_COUNT = &(aux->count);
             return;
         }
         aux = aux->next;
     }
     list->tail->next = new_node(value);
     list->tail = list->tail->next;
+}
+
+int hash(int value)
+{
+    return value % HASH_SIZE;
 }
