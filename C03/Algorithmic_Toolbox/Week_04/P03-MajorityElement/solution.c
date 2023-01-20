@@ -1,11 +1,31 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-void swap(int *first_value, int *second_value);
-int partition(int *array, int left, int right);
-void quicksort(int *array, int array_length, int left, int right);
-int binary_search_left_most(int *array, int array_length, int search_value);
+typedef struct Node
+{
+    int value;
+    int count;
+    struct Node *next;
+} Node;
 
-int found_a_majority_element(int *array, int array_length);
+typedef struct LList
+{
+    int length;
+    int majority_cand;
+    int *majority_count;
+    Node *head;
+    Node *tail;
+} LList;
+
+
+Node *new_node(int value);
+LList *new_linked_list();
+void print_linked_list(LList *list);
+void free_linkedF_list(LList *list);
+
+void search_linked_list(LList *list, int value);
+
+int majority_element(int *array, int array_length);
 
 int main()
 {
@@ -16,117 +36,104 @@ int main()
     for (int i = 0; i < array_length; i++)
         scanf("%d", &array[i]);
 
-    printf("%d\n", found_a_majority_element(array, array_length));
+    printf("%d\n", majority_element(array, array_length));
+
 
     return 0;
 }
 
-int found_a_majority_element(int *array, int array_length)
+int majority_element(int *array, int array_length)
 {
-    quicksort(array, array_length, 0, array_length - 1);
+    // LList *hash_map[100];
+    LList *list = new_linked_list();
 
-    int middle_element = ((-1 * array_length) / 2) * -1;
+    list->head = new_node(array[0]);
+    list->tail = list->head;
+    list->majority_cand = array[0];
+    list->majority_count= &(list->head->count);
 
-    int goes_through_left_side;
-    int goes_through_right_side;
-
-    if (array_length % 2 == 1)
-    {
-        goes_through_left_side = array[middle_element - 1] == array[middle_element];
-        goes_through_right_side = array[middle_element] == array[middle_element + 1];
-    }
-    else
-    {
-        goes_through_left_side = array[middle_element - 1] == array[middle_element];
-        goes_through_right_side = goes_through_left_side;
-    }
-
-    if (!goes_through_left_side && !goes_through_right_side)
-        return 0;
-
-    if (goes_through_left_side && !goes_through_right_side)
-    {
-        if (array[0] != array[middle_element])
-            return 0;
-        return 1;
-    }
-    if (!goes_through_left_side && goes_through_right_side)
-    {
-        if (array[middle_element] != array[array_length - 1])
-            return 0;
-        return 1;
-    }
-
-    int left_most_pos = binary_search_left_most(array, array_length, array[middle_element]);
-
-    if (array[left_most_pos] == array[array_length / 2 + left_most_pos])
+    for (int i = 1; i < array_length; ++i)
+        search_linked_list(list, array[i]);
+    if (*(list->majority_count) > array_length/2)
         return 1;
     return 0;
 }
 
-void quicksort(int *array, int array_length, int left, int right)
+LList *new_linked_list()
 {
-    while (left < right)
-    {
-        int middle = partition(array, left, right);
-        if (middle - left < right - middle)
-        {
-            quicksort(array, array_length, left, middle - 1);
-            left = middle + 1;
-        }
-        else
-        {
-            quicksort(array, array_length, middle + 1, right);
-            right = middle - 1;
-        }
-    }
+    LList *list = (LList *) malloc(sizeof(LList));
+    list->head = NULL;
+    list->tail = NULL;
+    list->length = 0;
+
+    return list;
 }
 
-int partition(int *array, int left, int right)
+Node *new_node(int value)
 {
-    int pivot_position = left + (right - left) / 2;
-    int pivot = array[pivot_position];
-    swap(&array[left], &array[pivot_position]);
-
-    int j = left;
-    for (int i = left + 1; i <= right; ++i)
-    {
-        if (array[i] <= pivot)
-        {
-            j++;
-            swap(&array[j], &array[i]);
-        }
-    }
-    swap(&array[left], &array[j]);
-    return j;
+    Node *node = (Node *) malloc(sizeof(Node));
+    node->value = value;
+    node->count = 1;
+    node->next = NULL;
+    return node;
 }
 
-void swap(int *first_value, int *second_value)
+void print_linked_list(LList *list)
 {
-    int tmp_value = *first_value;
-    *first_value = *second_value;
-    *second_value = tmp_value;
+    Node *aux = list->head;
+    while (aux != NULL)
+    {
+        printf("%d ", aux->value);
+        aux = aux->next;
+    }
+    printf("\n");
 }
 
-int binary_search_left_most(int *array, int array_length, int search_value)
+void free_linked_list(LList *list)
 {
-    int lower_bound = 0;
-    int upper_bound = array_length - 1;
-
-    while (lower_bound <= upper_bound)
+    if (list == NULL)
+        return;
+    if (list->head == NULL)
     {
-        int middle = lower_bound + (upper_bound - lower_bound) / 2;
-
-        if (array[middle] == search_value)
-        {
-            if (array[middle - 1] != search_value)
-                return middle;
-            upper_bound = middle - 1;
-        }
-        else if (array[middle] < search_value)
-            lower_bound = middle + 1;
-        else
-            upper_bound = middle - 1;
+        free(list);
+        return;
     }
-    return -1;
+    if (list->head->next == NULL)
+    {
+        free(list->head);
+        free(list);
+        return;
+    }
+
+    Node *aux = list->head->next;
+    Node *aux_prev = list->head;
+
+    while (aux != NULL)
+    {
+        free(aux_prev);
+        aux_prev = aux;
+        aux = aux->next;
+    }
+    free(aux_prev);
+    free(list);
+}
+
+void search_linked_list(LList *list, int value)
+{
+
+    Node *aux = list->head;
+
+    while (aux != NULL)
+    {
+        if (aux->value == value)
+        {
+            (aux->count)++;
+            if (aux->value != list->majority_cand && aux->count > *(list->majority_count))
+                list->majority_count = &(aux->count);
+            return;
+        }
+        aux = aux->next;
+    }
+    list->tail->next = new_node(value);
+    list->tail = list->tail->next;
 }
