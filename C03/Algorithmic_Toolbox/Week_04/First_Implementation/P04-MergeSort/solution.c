@@ -68,26 +68,31 @@ void merge_the_two_sections_of_the_array(int *array, int first_position, int mid
 
     while (there_are_still_values_left_in_at_least_one_of_the_array_sections(pos_first_array_half, middle_position, pos_second_array_half, final_position))
     {
-        if (pos_first_array_half <= middle_position && array[pos_first_array_half] <= array[pos_second_array_half])
-            auxiliar_array[aux_pos++] = array[pos_first_array_half++];
+        if (pos_first_array_half <= middle_position)
+        {
+            if (array[pos_first_array_half] <= array[pos_second_array_half] || pos_second_array_half > final_position)
+                auxiliar_array[aux_pos++] = array[pos_first_array_half++];
+            else
+                auxiliar_array[aux_pos++] = array[pos_second_array_half++];
+        }
         else
             auxiliar_array[aux_pos++] = array[pos_second_array_half++];
     }
-    while (pos_first_array_half != (middle_position + 1))
-        auxiliar_array[aux_pos++] = array[pos_first_array_half++];
-    while (pos_second_array_half != (final_position + 1))
-        auxiliar_array[aux_pos++] = array[pos_second_array_half++];
+    // while (pos_first_array_half != (middle_position + 1))
+    //     auxiliar_array[aux_pos++] = array[pos_first_array_half++];
+    // while (pos_second_array_half != (final_position + 1))
+    //     auxiliar_array[aux_pos++] = array[pos_second_array_half++];
     copy_second_array_to_the_first_one_in_a_given_section_of_first_array(array, first_position, auxiliar_array, auxiliar_array_length);
 }
 
 int there_are_still_values_left_in_at_least_one_of_the_array_sections(int pos_first_array_half, int middle_position, int pos_second_array_half, int final_position)
 {
-    return pos_first_array_half != (middle_position + 1) && pos_second_array_half != (final_position + 1);
+    return pos_first_array_half <= middle_position || pos_second_array_half <= final_position;
 }
 
 void copy_second_array_to_the_first_one_in_a_given_section_of_first_array(int *first_array, int starting_position_in_first_array, int *second_array, int second_array_length)
 {
-    printf("Aux array len: %d\n", second_array_length);
+    // printf("Aux array len: %d\n", second_array_length);
     for (int current_position = 0; current_position < second_array_length; ++current_position)
         first_array[starting_position_in_first_array + current_position] = second_array[current_position];
 }
