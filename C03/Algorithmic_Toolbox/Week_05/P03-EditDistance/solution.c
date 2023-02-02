@@ -5,11 +5,11 @@
 
 #define MAX_INPUT_LENGTH 100
 
-
 char *read_string();
 int min_3(int, int, int);
 int **heap_int_matrix(int lines, int columns);
 void print_matrix(int **matrix, int l, int c);
+void free_heap_int_matrix(int **matrix, int lines);
 
 int edit_distance(char *str1, char *str2);
 
@@ -30,12 +30,9 @@ int edit_distance(char *str1, char *str2)
     int len_str1 = strlen(str1);
     int len_str2 = strlen(str2);
 
-    // printf("%d %d\n", len_str1,len_str2);
-    // printf("---%s---\n", str1);
-    // printf("---%s---\n", str2);
-
     int lines = len_str1 + 1;
     int columns = len_str2 + 1;
+
     int **dist = heap_int_matrix(lines, columns);
 
     for (int i = 0; i < lines; ++i)
@@ -56,8 +53,11 @@ int edit_distance(char *str1, char *str2)
                 dist[i][j] = min_3(insertion, deletion, mismatch);
         }
     }
-    // print_matrix(dist, lines, columns);
-    return dist[len_str1][len_str2];
+
+    int result = dist[len_str1][len_str2];
+
+    free_heap_int_matrix(dist, lines);
+    return result;
 }
 
 char *read_string()
@@ -66,7 +66,6 @@ char *read_string()
     fgets(str, MAX_INPUT_LENGTH + 1, stdin);
 
     int len_str = strlen(str);
-    // printf("lenstr = %d\n", len_str);
 
     if (len_str == MAX_INPUT_LENGTH && str[len_str - 1] != '\r' && str[len_str - 1] != '\n')
     {
@@ -106,4 +105,11 @@ void print_matrix(int **matrix, int l, int c)
             printf("%d ", matrix[i][j]);
         printf("\n");
     }
+}
+
+void free_heap_int_matrix(int **matrix, int lines)
+{
+    for (int i = 0; i < lines; ++i)
+        free(matrix[i]);
+    free(matrix);
 }
