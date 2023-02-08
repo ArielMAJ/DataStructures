@@ -1,5 +1,5 @@
-# Data Structures and Algorithms Specialization (Coursera)
+# DSA Courses
 
-## Algorithmic Toolbox (Course 01)
+## AT (01)
 
-## Data Structures (Course 02)
+## DS (02)
